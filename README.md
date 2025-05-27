@@ -10,7 +10,8 @@ Simple python tool for maintaining todo-tasks in source code.
 ```console
 foo@bar:~/project$ sct --list
 
-TODO
-1. implement sum function    (main.py)
-2. refactor this             (module.py)
+./main.py:26:Implement suffix filter
+./main.py:34:Implement done status
+./main.py:46:create enum for status
+./main.py:50:calculate priority
 ```
