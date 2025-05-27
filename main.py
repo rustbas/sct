@@ -49,7 +49,7 @@ def get_all_todos(files):
                         row_number=linenum,
                         # TODO: calculate priority
                         priority = 1,
-                        task=task
+                        task=task.strip()
                     ))
                     ID += 1
     return result
@@ -62,12 +62,21 @@ class Todo():
     row_number: int
     task: str
     priority: int
-                    
+
+    def string(self):
+        string = "{}:{}:{}"
+        return string.format(self.file, self.row_number, self.task)
+
 # curpath = os.getcwd()
+
+def print_tasks(tasks):
+    for todo in tasks:
+        string = todo.string()
+        print(string)
 
 files = get_file_list('.')
 print(files)
 
 # [Todo]
 tasks = get_all_todos(files)
-print(tasks)
+print_tasks(tasks)
