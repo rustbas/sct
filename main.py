@@ -4,13 +4,7 @@ from dataclasses import dataclass
 import os
 import re
 
-@dataclass
-class Todo():
-    ID: int
-    status: str # Maybe will change it to some ENUM
-    file: str
-    row_number: int
-    task: str
+
 
 def get_file_list(pwd, suffixes=None):
     elements = os.listdir(pwd)
@@ -36,14 +30,39 @@ def get_file_list(pwd, suffixes=None):
 
 ID = 0
 def get_all_todos(files):
+    global ID
     # DONEE: Implement done status
     match_pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):.*$'
+    findall_pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):(.*)$'
+    result = []
     for file in files:
         with open(file, "r") as f:
-            for line in f.readlines():
-                if re.match(match_pattern, line):
-                    print(repr(line.strip()))
+            for i, line in enumerate(f.readlines()):
+                if re.match(match_pattern, line.strip()):
+                    linenum, [(status, task)] = i+1, \
+                        re.findall(findall_pattern, line.strip())
+                    result.append(Todo(
+                        ID=ID,
+                        # TODO: create enum for status
+                        status = status,
+                        file=file,
+                        row_number=linenum,
+                        # TODO: calculate priority
+                        priority = 1,
+                        task=task
+                    ))
+                    ID += 1
+    return result
 
+@dataclass
+class Todo():
+    ID: int
+    status: str # Maybe will change it to some ENUM
+    file: str
+    row_number: int
+    task: str
+    priority: int
+                    
 # curpath = os.getcwd()
 
 files = get_file_list('.')
@@ -51,3 +70,4 @@ print(files)
 
 # [Todo]
 tasks = get_all_todos(files)
+print(tasks)
