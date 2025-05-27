@@ -37,11 +37,11 @@ def get_file_list(pwd, suffixes=None):
 ID = 0
 def get_all_todos(files):
     # DONEE: Implement done status
-    pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):.*$'
+    match_pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):.*$'
     for file in files:
         with open(file, "r") as f:
             for line in f.readlines():
-                if re.match(pattern, line):
+                if re.match(match_pattern, line):
                     print(repr(line.strip()))
 
 # curpath = os.getcwd()
