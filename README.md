@@ -4,7 +4,7 @@ Simple python tool for maintaining todo-tasks in source code.
 
 # Usage
 
-> [WARNING]
+> [!WARNING]
 > Not implemented yet
 
 ```console
