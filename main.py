@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 
+from dataclasses import dataclass
 import os
+import re
+
+@dataclass
+class Todo():
+    ID: int
+    status: str # Maybe will change it to some ENUM
+    file: str
+    row_number: int
+    task: str
 
 def get_file_list(pwd, suffixes=None):
     elements = os.listdir(pwd)
@@ -24,8 +34,20 @@ def get_file_list(pwd, suffixes=None):
     
     return sorted(files)
 
+ID = 0
+def get_all_todos(files):
+    # DONEE: Implement done status
+    pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):.*$'
+    for file in files:
+        with open(file, "r") as f:
+            for line in f.readlines():
+                if re.match(pattern, line):
+                    print(repr(line.strip()))
 
 # curpath = os.getcwd()
 
 files = get_file_list('.')
 print(files)
+
+# [Todo]
+tasks = get_all_todos(files)
