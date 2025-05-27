@@ -14,7 +14,7 @@ class Todo():
 
 def get_file_list(pwd, suffixes=None):
     elements = os.listdir(pwd)
-    
+
     # Ignore hidden dirs
     elements = list(filter(lambda x: x[0] != '.', elements))
 
@@ -23,7 +23,7 @@ def get_file_list(pwd, suffixes=None):
 
     files = list(filter(lambda x: os.path.isfile(x), elements))
     dirs = list(filter(lambda x: os.path.isdir(x), elements))
-    
+
     for directory in dirs:
         files += get_file_list(directory)
         pass
@@ -31,7 +31,7 @@ def get_file_list(pwd, suffixes=None):
     if not suffixes is None:
         # TODO: Implement suffix filter
         pass
-    
+
     return sorted(files)
 
 ID = 0
