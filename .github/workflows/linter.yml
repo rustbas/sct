@@ -14,8 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # DevOps
-      - name: Getting DevOps CV codebase
+      - name: Getting codebase
         uses: actions/checkout@v4
         with:
           ref: 'dev'
       - run: echo Hello world
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - run: pip install pylint
+      - run: pylint main.py
