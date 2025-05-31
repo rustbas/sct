@@ -4,13 +4,20 @@ from dataclasses import dataclass
 import os
 import re
 
+from sct import SCT
 
+def ignore_file_condition(path):
+    if path[0] == '.': # Hidden dirs
+        return False
+    if path[0:2] == '__': # __pycache__, etc
+        return False
+    return True
 
 def get_file_list(pwd, suffixes=None):
     elements = os.listdir(pwd)
 
-    # Ignore hidden dirs
-    elements = list(filter(lambda x: x[0] != '.', elements))
+    # Ignore some dirs dirs
+    elements = list(filter(ignore_file_condition, elements))
 
     # Add root prefix
     elements = list(map(lambda x: os.path.join(pwd, x), elements))
@@ -36,6 +43,7 @@ def get_all_todos(files):
     findall_pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):(.*)$'
     result = []
     for file in files:
+        print(file)
         with open(file, "r") as f:
             for i, line in enumerate(f.readlines()):
                 if re.match(match_pattern, line.strip()):
@@ -76,6 +84,8 @@ def print_tasks(tasks):
 
 files = get_file_list('.')
 print(files)
+
+sct = SCT()
 
 # [Todo]
 tasks = get_all_todos(files)
