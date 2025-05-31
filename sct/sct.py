@@ -42,8 +42,12 @@ class SCT():
     """
     def __init__(self, pwd, suffixes=None):
         self.files = self.get_file_list(pwd, suffixes)
-        
+        self.todos = []
+
     def get_file_list(self, pwd, suffixes=None):
+        """
+        Docstring
+        """
         elements = os.listdir(pwd)
 
         # Ignore some dirs dirs
@@ -57,7 +61,6 @@ class SCT():
 
         for directory in dirs:
             files += self.get_file_list(directory)
-            pass
 
         if not suffixes is None:
             # TODO: Implement suffix filter
@@ -66,14 +69,16 @@ class SCT():
         return sorted(files)
 
     def get_all_todos(self):
+        """
+        Docstring
+        """
 
         match_pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):.*$'
         findall_pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):(.*)$'
-        self.todos = []
         for file in self.files:
             print(file)
-            with open(file, "r") as f:
-                for i, line in enumerate(f.readlines()):
+            with open(file, "r", encoding="utf-8") as code_file:
+                for i, line in enumerate(code_file.readlines()):
                     if re.match(match_pattern, line.strip()):
                         linenum, [(status, task)] = i+1, \
                             re.findall(findall_pattern, line.strip())
