@@ -6,8 +6,10 @@ import re
 
 from sct import SCT
 
-sct = SCT(".")
+if __name__ == "__main__":
 
-# [Todo]
-tasks = sct.todos
-print(tasks)
+    sct = SCT(".")
+
+    # [Todo]
+    tasks = sct.todos
+    print(tasks)
