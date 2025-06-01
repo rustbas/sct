@@ -1,9 +1,11 @@
 import sys
+import os
 
 sys.path.append('../')
 
 import sct
 
-def test_init():
-    test = sct.SCT('.')
-    assert test.todos == []
+class TestInit:
+    def test_init(self):
+        test = sct.SCT('./tests')
+        assert test.todos == []
