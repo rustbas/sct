@@ -76,7 +76,6 @@ class SCT():
         match_pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):.*$'
         findall_pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):(.*)$'
         for file in self.files:
-            print(file)
             with open(file, "r", encoding="utf-8") as code_file:
                 for i, line in enumerate(code_file.readlines()):
                     if re.match(match_pattern, line.strip()):
