@@ -43,6 +43,7 @@ class SCT():
     def __init__(self, pwd, suffixes=None):
         self.files = self.get_file_list(pwd, suffixes)
         self.todos = []
+        self.get_all_todos()
 
     def get_file_list(self, pwd, suffixes=None):
         """
@@ -91,4 +92,3 @@ class SCT():
                             priority = 1,
                             task=task.strip()
                         ))
-        return self.todos

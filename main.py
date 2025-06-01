@@ -9,5 +9,5 @@ from sct import SCT
 sct = SCT(".")
 
 # [Todo]
-tasks = sct.get_all_todos()
+tasks = sct.todos
 print(tasks)
