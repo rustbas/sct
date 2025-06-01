@@ -27,7 +27,8 @@ class Todo():
     task: str
     priority: int
 
-    def string(self):
+    @property
+    def as_string(self):
         """
         Docstring
         """
