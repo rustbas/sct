@@ -35,8 +35,6 @@ class Todo():
         string = "{}:{}:{}"
         return string.format(self.file, self.row_number, self.task)
 
-# curpath = os.getcwd()
-
 class SCT():
     """
     Docstring
