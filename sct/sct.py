@@ -40,9 +40,16 @@ class SCT():
     Docstring
     """
     def __init__(self, pwd, suffixes=None):
-        self.files = self.get_file_list(pwd, suffixes)
-        self.todos = []
+        self.__files = self.get_file_list(pwd, suffixes)
+        self.__todos = []
         self.get_all_todos()
+
+    @property
+    def todos(self):
+        """
+        Return list of Todo
+        """
+        return self.__todos
 
     def get_file_list(self, pwd, suffixes=None):
         """
@@ -75,13 +82,13 @@ class SCT():
 
         match_pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):.*$'
         findall_pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):(.*)$'
-        for file in self.files:
+        for file in self.__files:
             with open(file, "r", encoding="utf-8") as code_file:
                 for i, line in enumerate(code_file.readlines()):
                     if re.match(match_pattern, line.strip()):
                         linenum, [(status, task)] = i+1, \
                             re.findall(findall_pattern, line.strip())
-                        self.todos.append(Todo(
+                        self.__todos.append(Todo(
                             # ID=0,
                             # TODO: create enum for status
                             status = status,
