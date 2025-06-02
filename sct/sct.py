@@ -11,15 +11,6 @@ def unimplemened():
     """
     raise NotImplementedError("Not implemented yet!")
 
-def ignore_file_condition(path):
-    """
-    Docstring
-    """
-    if path[0] == '.': # Hidden dirs
-        return False
-    if path[0:2] == '__': # __pycache__, etc
-        return False
-    return True
 
 @dataclass
 class Todo():
@@ -46,11 +37,11 @@ class SCT():
     """
     Docstring
     """
-    def __init__(self, args, suffixes=None):
+    def __init__(self, args):
         # Get arguments
         self.__path = args.path
 
-        self.__files = self.get_file_list(self.__path, suffixes)
+        self.__files = self.get_files_list(self.__path)
         self.__todos = []
         self.get_all_todos()
 
@@ -67,27 +58,49 @@ class SCT():
         """
         unimplemened()
 
-    def get_file_list(self, pwd, suffixes=None):
+    @staticmethod
+    def is_included(path):
         """
         Docstring
         """
-        elements = os.listdir(pwd)
+        if path[0] == '.': # Hidden dirs
+            return False
+        if path[0:2] == '__': # __pycache__, etc
+            return False
+        return True
 
-        # Ignore some dirs dirs
-        elements = list(filter(ignore_file_condition, elements))
+    def list_directory_elements(self, path):
+        """
+        List all elements if path, excluded by 'is_included'
+        """
+        elements = os.listdir(path)
 
-        # Add root prefix
-        elements = list(map(lambda x: os.path.join(pwd, x), elements))
+        # filter some paths
+        elements = filter(self.is_included, elements)
 
-        files = list(filter(os.path.isfile, elements))
+        # add absolute (relatively root) path
+        elements = list(map(lambda x: os.path.join(path, x), elements))
+        return elements
+
+    def elements_to_dirs_and_files(self, elements):
+        """
+        Segregate directory elements to directories and files
+        """
         dirs = list(filter(os.path.isdir, elements))
+        files = list(filter(os.path.isfile, elements))
+
+        return dirs, files
+
+    def get_files_list(self, pwd):
+        """
+        Docstring
+        """
+
+        elements = self.list_directory_elements(pwd)
+        dirs, files = self.elements_to_dirs_and_files(elements)
 
         for directory in dirs:
-            files += self.get_file_list(directory)
-
-        if not suffixes is None:
-            # TODO: Implement suffix filter
-            pass
+            files += self.get_files_list(directory)
 
         return sorted(files)
 
