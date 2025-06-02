@@ -13,6 +13,9 @@ default_parser.add_argument('-p', '--path',
                             default=".",
                             type=str,
                             help="Searching for TODOs directory (default: \".\")")
+default_parser.add_argument('-l', '--list',
+                            action="store_true",
+                            help="Printing all TODOs in quick_fix format")
 
 if __name__ == "__main__":
     parsed_arguments = default_parser.parse_args()
@@ -21,4 +24,6 @@ if __name__ == "__main__":
             )
 
     tasks = sct.todos
-    print(tasks)
+    # print(tasks)
+    if (parsed_arguments.list):
+        sct.print_as_strings()

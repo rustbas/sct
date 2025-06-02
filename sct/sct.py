@@ -21,11 +21,12 @@ class Todo():
     Docstring
     """
     # ID: int
-    status: str # Maybe will change it to some ENUM
     file: str
     row_number: int
     task: str
     priority: int
+    status: bool = False # Maybe will change it to some ENUM
+    # DONE: create status
 
     @property
     def as_string(self):
@@ -92,13 +93,24 @@ class SCT():
                     if re.match(match_pattern, line.strip()):
                         linenum, [(status, task)] = i+1, \
                             re.findall(findall_pattern, line.strip())
+                        if status == 'TODO':
+                            status = False
+                        else:
+                            status = True
                         self.__todos.append(Todo(
                             # ID=0,
-                            # TODO: create enum for status
-                            status = status,
                             file=file,
                             row_number=linenum,
                             # TODO: calculate priority
                             priority = 1,
-                            task=task.strip()
+                            task=task.strip(),
+                            status=status
                         ))
+
+    def print_as_strings(self):
+        """
+        Print all current TODOs in quick fix format (for Emacs/Vim parsing ability)
+        """
+        for todo in self.__todos:
+            if not todo.status:
+                print(todo.as_string)
