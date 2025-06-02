@@ -37,13 +37,30 @@ class SCT():
     """
     Docstring
     """
-    def __init__(self, args):
+    def __init__(self, args, suffixies = None):
         # Get arguments
         self.__path = args.path
 
-        self.__files = self.get_files_list(self.__path)
+        # Init attributes
+        self._files = self.get_files_list(self.__path)
         self.__todos = []
+
+        # Filter files
+        self.suffixies = suffixies
+        if suffixies is not None:
+            self.filter_by_suffix()
+
         self.get_all_todos()
+
+    def filter_by_suffix(self):
+        """
+        Filter files by it's suffix (source code extensions)
+        """
+        result = []
+        for suffix in self.suffixies:
+            tmp = filter(lambda x: x.endswith(suffix), self._files)
+            result += list(tmp)
+        self._files = result
 
     @property
     def todos(self):
@@ -111,7 +128,7 @@ class SCT():
 
         match_pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):.*$'
         findall_pattern = r'^.*(TOD[O]{1,3}|DON[E]{1,3}):(.*)$'
-        for file in self.__files:
+        for file in self._files:
             with open(file, "r", encoding="utf-8") as code_file:
                 for i, line in enumerate(code_file.readlines()):
                     if re.match(match_pattern, line.strip()):

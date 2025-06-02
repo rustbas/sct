@@ -20,7 +20,8 @@ default_parser.add_argument('-l', '--list',
 if __name__ == "__main__":
     parsed_arguments = default_parser.parse_args()
     sct = SCT(
-            args = parsed_arguments
+            args = parsed_arguments,
+            suffixies = ["py"]
             )
 
     tasks = sct.todos
