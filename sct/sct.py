@@ -39,10 +39,14 @@ class SCT():
     """
     Docstring
     """
-    def __init__(self, pwd, suffixes=None):
-        self.__files = self.get_file_list(pwd, suffixes)
+    def __init__(self, args, suffixes=None):
+        # Get arguments
+        self.__path = args.path
+
+        self.__files = self.get_file_list(self.__path, suffixes)
         self.__todos = []
         self.get_all_todos()
+
 
     @property
     def todos(self):
