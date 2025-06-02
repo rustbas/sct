@@ -54,6 +54,11 @@ class SCT():
         self.__todos = []
         self.get_all_todos()
 
+    def create_issue(self):
+        """
+        Create issue on GitHub
+        """
+        unimplemened()
 
     @property
     def todos(self):
