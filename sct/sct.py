@@ -5,6 +5,12 @@ from dataclasses import dataclass
 import os
 import re
 
+def unimplemened():
+    """
+    Plug-function that raise NotImplementedError
+    """
+    raise NotImplementedError("Not implemented yet!")
+
 def ignore_file_condition(path):
     """
     Docstring
