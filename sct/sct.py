@@ -54,18 +54,18 @@ class SCT():
         self.__todos = []
         self.get_all_todos()
 
-    def create_issue(self):
-        """
-        Create issue on GitHub
-        """
-        unimplemened()
-
     @property
     def todos(self):
         """
         Return list of Todo
         """
         return self.__todos
+
+    def create_issue(self):
+        """
+        Create issue on GitHub
+        """
+        unimplemened()
 
     def get_file_list(self, pwd, suffixes=None):
         """
