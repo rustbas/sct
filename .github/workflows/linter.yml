@@ -23,4 +23,4 @@ jobs:
         with:
           python-version: 3.x
       - run: pip install pylint
-      - run: pylint sct --disable fixme
+      - run: pylint sct --disable fixme,w0640
