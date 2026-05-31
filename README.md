@@ -60,15 +60,16 @@ pipx install .
 .venv/bin/sct doctor
 .venv/bin/sct doctor --compare
 
-# Список открытых задач
+# Список открытых задач (id в каждой строке)
 .venv/bin/sct list
+.venv/bin/sct list --no-id          # компактный вид
 .venv/bin/sct list --priority 2
 .venv/bin/sct list --all --json
 
-# Закрыть / открыть (проверяет, что строка не менялась с последнего sync)
-.venv/bin/sct done <id>
+# Закрыть / открыть: id, короткий префикс id (как git), или file:line
+.venv/bin/sct done dd5be318
 .venv/bin/sct done path/to/file.py:12
-.venv/bin/sct done --dry-run <id>
+.venv/bin/sct done --dry-run dd5be
 .venv/bin/sct reopen <id>
 
 .venv/bin/sct --version
@@ -77,12 +78,14 @@ pipx install .
 
 Корень проекта ищется вверх по каталогам (наличие `.sct/cache.json` или `.sct/config.json`), либо задайте `--root`.
 
+После обновления с 0.2.1 на 0.2.2 один раз выполните `sct sync --full` — схема id задач изменилась (теперь hash файла + номера строки).
+
 ## Коды выхода
 
 | Код | Значение |
 |-----|----------|
 | 0   | Успех |
-| 1   | Не найдено |
+| 1   | Не найдено / неоднозначный префикс id |
 | 2   | Устаревший кэш / строка изменилась (`doctor`, `done`) |
 | 3   | Ошибка ввода-вывода |
 | 4   | Неверное использование (например, TUI без TTY) |
