@@ -33,6 +33,7 @@ dependencies = [
 Homepage = "https://github.com/rustbas/sct"
 Repository = "https://github.com/rustbas/sct"
 Changelog = "https://github.com/rustbas/sct/blob/main/CHANGELOG.md"
+PyPI = "https://pypi.org/project/sctodo/"
 
 [project.optional-dependencies]
 dev = []

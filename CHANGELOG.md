@@ -7,7 +7,7 @@
 - Исправлено: `theme.tcss` включается в пакет (pip / pipx)
 - `sct list` показывает id; `--no-id` для компактного вывода
 - `done` / `reopen` / `show`: короткий префикс hex-id (мин. 4 символа), как в git
-- Публикация на PyPI как **`sctodo`** (`pip install sctodo`, CLI — `sct`)
+- Публикация на PyPI как **[`sctodo`](https://pypi.org/project/sctodo/)** — `pip install sctodo`, CLI — `sct` (версия 0.2.2 на PyPI)
 - CI: проверка сборки wheel/sdist; GitHub Actions — автопубликация по тегам `v*`
 
 ## 0.2.1
