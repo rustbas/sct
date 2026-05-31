@@ -1,2 +1,4 @@
 # Development / CI: install runtime deps + editable package.
 -r requirements.txt
+build>=1.0
+twine>=5.0
