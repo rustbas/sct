@@ -66,9 +66,26 @@ class Config:
     exclude_dirs: tuple[str, ...] = DEFAULT_EXCLUDE_DIRS
 
     @classmethod
+    def find_project_root(cls, start: Path | None = None) -> Path:
+        """Walk up from start until .sct config/cache is found."""
+        start = (start or Path.cwd()).resolve()
+        markers = (".sct/config.json", ".sct/cache.json")
+        for directory in [start, *start.parents]:
+            if any((directory / name).is_file() for name in markers):
+                return directory
+        return start
+
+    @classmethod
     def discover(cls, root: Path | None = None) -> Config:
-        root = (root or Path.cwd()).resolve()
-        cfg = cls(root=root, cache_path=root / ".sct" / "cache.json", config_path=root / ".sct" / "config.json")
+        if root is not None:
+            project_root = root.resolve()
+        else:
+            project_root = cls.find_project_root()
+        cfg = cls(
+            root=project_root,
+            cache_path=project_root / ".sct" / "cache.json",
+            config_path=project_root / ".sct" / "config.json",
+        )
         if cfg.config_path.is_file():
             cfg._load_file()
         return cfg
