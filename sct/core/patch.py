@@ -4,6 +4,7 @@ from pathlib import Path
 
 from sct.core.markers import done_marker, open_marker, parse_line, replace_marker_on_line
 from sct.core.models import Status, TodoItem
+from sct.core.validate import verify_line_unchanged
 
 
 def _write_lines_atomically(path: Path, lines: list[str]) -> None:
@@ -31,6 +32,7 @@ def patch_line(path: Path, line_number: int, new_marker: str) -> str:
 
 
 def mark_done(item: TodoItem, root: Path) -> TodoItem:
+    verify_line_unchanged(item, root)
     path = root / item.file
     new_marker = done_marker(item.priority)
     new_line = patch_line(path, item.line, new_marker)
@@ -46,6 +48,7 @@ def mark_done(item: TodoItem, root: Path) -> TodoItem:
 
 
 def mark_open(item: TodoItem, root: Path) -> TodoItem:
+    verify_line_unchanged(item, root)
     path = root / item.file
     new_marker = open_marker(item.priority)
     new_line = patch_line(path, item.line, new_marker)
