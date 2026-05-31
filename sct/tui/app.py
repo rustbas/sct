@@ -7,6 +7,7 @@ from textual.containers import Vertical
 from textual.screen import ModalScreen
 from textual.widgets import DataTable, Footer, Header, Label, Static
 
+from sct.core.errors import SctError
 from sct.core.models import Status, TodoItem
 from sct.core.service import TodoService
 
@@ -99,6 +100,13 @@ class SctApp(App):
         table = self.query_one(DataTable)
         table.add_columns("P", "S", "File", "Line", "Task")
         table.cursor_type = "row"
+        report = self.service.doctor()
+        if not report.ok:
+            self.notify(
+                "Cache may be stale — press r to sync",
+                severity="warning",
+                timeout=6,
+            )
         self._sync_background()
 
     @work(thread=True)
@@ -193,7 +201,7 @@ class SctApp(App):
             return
         try:
             old, new = self.service.preview_done(item.id)
-        except (KeyError, OSError, ValueError) as e:
+        except (SctError, OSError, ValueError) as e:
             self.notify(str(e), severity="error")
             return
 
@@ -202,7 +210,7 @@ class SctApp(App):
                 return
             try:
                 self.service.done(item.id)
-            except (KeyError, OSError, ValueError) as e:
+            except (SctError, OSError, ValueError) as e:
                 self.notify(str(e), severity="error")
                 return
             self.notify(f"Done: {item.file}:{item.line}")
@@ -220,7 +228,7 @@ class SctApp(App):
             return
         try:
             self.service.reopen(item.id)
-        except (KeyError, OSError, ValueError) as e:
+        except (SctError, OSError, ValueError) as e:
             self.notify(str(e), severity="error")
             return
         self.notify(f"Reopened: {item.file}:{item.line}")
