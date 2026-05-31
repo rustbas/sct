@@ -1,0 +1,2 @@
+# Development / CI: install runtime deps + editable package.
+-r requirements.txt
