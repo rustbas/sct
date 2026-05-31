@@ -1,0 +1,4 @@
+{
+  "include_suffixes": [".py", ".md", ".rs", ".go"],
+  "exclude_dirs": [".git", "__pycache__", ".venv", "node_modules"]
+}
