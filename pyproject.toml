@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sct"
+version = "0.1.0"
+description = "Source Code Todo — scan TODO/DONE markers in code"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "textual>=0.47.0",
+]
+
+[project.optional-dependencies]
+dev = []
+
+[project.scripts]
+sct = "sct.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["sct*"]
