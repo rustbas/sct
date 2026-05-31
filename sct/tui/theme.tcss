@@ -1,0 +1,77 @@
+/* Dark terminal theme: muted text, blue selection. */
+
+Screen {
+    background: #1c1c1c;
+    color: #d4d4d4;
+}
+
+#title-bar {
+    dock: top;
+    height: 1;
+    background: #1c1c1c;
+    color: #808080;
+    padding: 0 1;
+}
+
+#tasks {
+    height: 1fr;
+    background: #1c1c1c;
+    border: none;
+}
+
+#tasks > .datatable--header {
+    background: #1c1c1c;
+    color: #666666;
+    text-style: bold;
+}
+
+#tasks > .datatable--cursor {
+    background: #005f87;
+    color: #eeeeee;
+}
+
+#tasks:focus > .datatable--cursor {
+    background: #0087d7;
+    color: #ffffff;
+}
+
+#detail {
+    dock: bottom;
+    height: 1;
+    background: #1c1c1c;
+    color: #5fafaf;
+    padding: 0 1;
+}
+
+#status-bar {
+    dock: bottom;
+    height: 1;
+    background: #262626;
+    color: #808080;
+    padding: 0 1;
+}
+
+ConfirmDoneScreen, FilterScreen {
+    background: #1c1c1c;
+    align: center middle;
+}
+
+#confirm-body, #filter-body {
+    width: 90%;
+    max-width: 90;
+    height: auto;
+    background: #262626;
+    border: solid #444444;
+    padding: 1 2;
+    color: #d4d4d4;
+}
+
+#filter-input {
+    background: #1c1c1c;
+    border: solid #444444;
+    color: #d4d4d4;
+}
+
+#filter-input:focus {
+    border: solid #0087d7;
+}
