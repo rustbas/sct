@@ -1,5 +1,7 @@
 # Source Code Todo (sct)
 
+[![PyPI](https://img.shields.io/pypi/v/sctodo)](https://pypi.org/project/sctodo/)
+
 Утилита для учёта задач прямо в исходниках: ищет метки `TODO` / `DONE` в коде, кэширует состояние в JSON и даёт CLI и TUI для просмотра и закрытия задач.
 
 > [!WARNING]
@@ -23,13 +25,15 @@
 
 ### PyPI (рекомендуется)
 
-Пакет на PyPI называется **`sctodo`**, CLI-команда — **`sct`**:
+Пакет **[`sctodo`](https://pypi.org/project/sctodo/)** опубликован на PyPI; CLI-команда после установки — **`sct`**:
 
 ```bash
 pip install sctodo
 # или изолированно в ~/.local/bin:
 pipx install sctodo
 ```
+
+Требуется Python ≥ 3.10. Актуальная версия на PyPI: **0.2.2**.
 
 ### Из исходников (разработка)
 
@@ -44,35 +48,37 @@ python3 -m venv .venv
 
 ## Использование
 
+После `pip install sctodo` или `pipx install sctodo` команда доступна как `sct`. Ниже — те же примеры; при разработке из исходников замените `sct` на `.venv/bin/sct`.
+
 ```bash
 # TUI (нужен интерактивный терминал)
-.venv/bin/sct
+sct
 
 # Первичная настройка каталога .sct/
-.venv/bin/sct init
+sct init
 
 # Синхронизация (по умолчанию инкрементальная)
-.venv/bin/sct sync
-.venv/bin/sct sync --full -v
+sct sync
+sct sync --full -v
 
 # Проверка кэша и исходников
-.venv/bin/sct doctor
-.venv/bin/sct doctor --compare
+sct doctor
+sct doctor --compare
 
 # Список открытых задач (id в каждой строке)
-.venv/bin/sct list
-.venv/bin/sct list --no-id          # компактный вид
-.venv/bin/sct list --priority 2
-.venv/bin/sct list --all --json
+sct list
+sct list --no-id          # компактный вид
+sct list --priority 2
+sct list --all --json
 
 # Закрыть / открыть: id, короткий префикс id (как git), или file:line
-.venv/bin/sct done dd5be318
-.venv/bin/sct done path/to/file.py:12
-.venv/bin/sct done --dry-run dd5be
-.venv/bin/sct reopen <id>
+sct done dd5be318
+sct done path/to/file.py:12
+sct done --dry-run dd5be
+sct reopen <id>
 
-.venv/bin/sct --version
-.venv/bin/python -m sct sync
+sct --version
+python -m sct sync
 ```
 
 Корень проекта ищется вверх по каталогам (наличие `.sct/cache.json` или `.sct/config.json`), либо задайте `--root`.
@@ -106,17 +112,42 @@ python3 -m venv .venv
 
 - Кэш: `.sct/cache.json` (в `.gitignore`)
 - Конфиг: `.sct/config.json` — создайте через `sct init` или скопируйте `.sct/config.json.example`
-- По умолчанию не сканируются каталоги `tests/`, `test/`, `.venv`, `node_modules` и др. (см. `sct/core/config.py`)
+
+### Какие файлы сканируются
+
+По умолчанию — текстовые файлы с расширениями из `DEFAULT_INCLUDE_SUFFIXES` в [`sct/core/config.py`](sct/core/config.py):
+
+`.py`, `.pyi`, `.rs`, `.go`, `.js`, `.jsx`, `.ts`, `.tsx`, `.c`, `.h`, `.cpp`, `.hpp`, `.java`, `.kt`, `.lua`, `.vim`, `.sh`, `.bash`, `.zsh`, `.md`, `.yaml`, `.yml`, `.toml`, `.json`, `.sql`, `.rb`, `.php`, `.swift`, `.scala`, `.cs`, `.html`, `.css`, `.scss`, **`.tf`**
+
+Файлы без расширения и с другими суффиксами пропускаются. Содержимое читается как UTF-8.
+
+**Исключения по каталогам** (`DEFAULT_EXCLUDE_DIRS`): `.git`, `.hg`, `.svn`, `__pycache__`, `.venv`, `venv`, `node_modules`, `.mypy_cache`, `.pytest_cache`, `.ruff_cache`, `dist`, `build`, `.sct`, `tests`, `test`.
+
+Дополнительно не заходят в каталоги, имя которых **начинается с `.`** (например `.github`), даже если их нет в списке.
+
+### Настройка через `.sct/config.json`
+
+```json
+{
+  "include_suffixes": [".py", ".md", ".tf"],
+  "exclude_dirs": ["vendor"]
+}
+```
+
+- `include_suffixes` — **заменяет** дефолтный список расширений целиком.
+- `exclude_dirs` — **добавляет** каталоги к дефолтному списку исключений (дефолт не убирается).
+
+После правки конфига выполните `sct sync --full`.
 
 ## JSON для скриптов
 
 ```bash
-.venv/bin/sct list --json
+sct list --json
 ```
 
 ```json
 {
-  "version": "0.2.0",
+  "version": "0.2.2",
   "items": [ { "id": "…", "file": "…", "line": 1, … } ]
 }
 ```
