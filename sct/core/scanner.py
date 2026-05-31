@@ -12,8 +12,8 @@ def line_hash(line: str) -> str:
     return hashlib.sha256(line.encode("utf-8", errors="replace")).hexdigest()[:16]
 
 
-def make_id(relative_file: str, task: str) -> str:
-    key = f"{relative_file}\0{task.strip()}"
+def make_id(relative_file: str, line: int) -> str:
+    key = f"{relative_file}\0{line}"
     return hashlib.sha256(key.encode("utf-8")).hexdigest()[:16]
 
 
@@ -56,7 +56,7 @@ def scan_file(config: Config, path: Path) -> list[TodoItem]:
             continue
         marker = m.group("marker")
         task = m.group("task").strip()
-        item_id = make_id(rel, task)
+        item_id = make_id(rel, lineno)
         items.append(
             TodoItem(
                 id=item_id,

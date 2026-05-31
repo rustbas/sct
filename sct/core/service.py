@@ -6,9 +6,10 @@ from pathlib import Path
 
 from sct.core.config import Config
 from sct.core.doctor import DoctorReport, run_doctor
-from sct.core.errors import NotFoundError, SctError
+from sct.core.errors import AmbiguousRefError, NotFoundError, SctError
 from sct.core.models import Status, TodoItem
 from sct.core.patch import mark_done, mark_open
+from sct.core.refs import resolve_ref
 from sct.core.store import Cache, Store
 from sct.core.sync import sync
 
@@ -68,23 +69,9 @@ class TodoService:
         return self.load_cache().items.get(item_id)
 
     def resolve(self, ref: str) -> TodoItem | None:
-        """ref: id, or file:line"""
+        """ref: id, id prefix (hex), or file:line"""
         cache = self.load_cache()
-        if ref in cache.items:
-            return cache.items[ref]
-        if ":" in ref:
-            file_part, line_part = ref.rsplit(":", 1)
-            try:
-                line_no = int(line_part)
-            except ValueError:
-                return None
-            for item in cache.items.values():
-                if item.file == file_part and item.line == line_no:
-                    return item
-            for item in cache.items.values():
-                if item.file.endswith(file_part) and item.line == line_no:
-                    return item
-        return None
+        return resolve_ref(ref, cache.items)
 
     def done(self, ref: str) -> TodoItem:
         item = self._require(ref)
@@ -107,7 +94,10 @@ class TodoService:
         return updated
 
     def _require(self, ref: str) -> TodoItem:
-        item = self.resolve(ref)
+        try:
+            item = self.resolve(ref)
+        except AmbiguousRefError:
+            raise
         if item is None:
             raise NotFoundError(f"Todo not found: {ref}")
         return item

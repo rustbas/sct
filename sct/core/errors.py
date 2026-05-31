@@ -29,3 +29,7 @@ class StaleLineError(SctError):
 
 class DuplicateTaskError(SctError):
     exit_code = EXIT_IO
+
+
+class AmbiguousRefError(SctError):
+    exit_code = EXIT_NOT_FOUND
