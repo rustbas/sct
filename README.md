@@ -33,7 +33,7 @@ pip install sctodo
 pipx install sctodo
 ```
 
-Требуется Python ≥ 3.10. Актуальная версия на PyPI: **0.2.2**.
+Требуется Python ≥ 3.10. Актуальная версия на PyPI: **0.2.3**.
 
 ### Из исходников (разработка)
 
@@ -147,7 +147,7 @@ sct list --json
 
 ```json
 {
-  "version": "0.2.2",
+  "version": "0.2.3",
   "items": [ { "id": "…", "file": "…", "line": 1, … } ]
 }
 ```

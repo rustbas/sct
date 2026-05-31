@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.3
+
+- Сканирование Terraform-файлов (`.tf`) по умолчанию
+- README: документация сканируемых расширений и исключений; бейдж PyPI; примеры через `sct` после `pip install`
+- `.sct/config.json.example`: `.tf` в примере
+- `pyproject.toml`: URL PyPI в `project.urls`
+
 ## 0.2.2
 
 - **Breaking:** id задачи = hash(файл + строка), не текст; после обновления — `sct sync --full`
@@ -7,7 +14,7 @@
 - Исправлено: `theme.tcss` включается в пакет (pip / pipx)
 - `sct list` показывает id; `--no-id` для компактного вывода
 - `done` / `reopen` / `show`: короткий префикс hex-id (мин. 4 символа), как в git
-- Публикация на PyPI как **[`sctodo`](https://pypi.org/project/sctodo/)** — `pip install sctodo`, CLI — `sct` (версия 0.2.2 на PyPI)
+- Публикация на PyPI как **[`sctodo`](https://pypi.org/project/sctodo/)** — `pip install sctodo`, CLI — `sct`
 - CI: проверка сборки wheel/sdist; GitHub Actions — автопубликация по тегам `v*`
 
 ## 0.2.1
