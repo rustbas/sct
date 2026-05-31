@@ -12,7 +12,7 @@ from sct.core.models import Status
 from sct.core.service import TodoService
 
 
-def _print_items(items, *, as_json: bool) -> None:
+def _print_items(items, *, as_json: bool, show_id: bool = True) -> None:
     if as_json:
         payload = {
             "version": __version__,
@@ -22,7 +22,13 @@ def _print_items(items, *, as_json: bool) -> None:
         return
     for item in items:
         mark = " " if item.status == Status.OPEN else "x"
-        print(f"[{mark}] P{item.priority}  {item.file}:{item.line}: {item.task}")
+        if show_id:
+            print(
+                f"[{mark}] P{item.priority}  {item.id}  "
+                f"{item.file}:{item.line}  {item.task}"
+            )
+        else:
+            print(f"[{mark}] P{item.priority}  {item.file}:{item.line}: {item.task}")
 
 
 def _print_doctor(report: DoctorReport) -> None:
@@ -86,13 +92,18 @@ def main(argv: list[str] | None = None) -> None:
     p_list.add_argument("--all", action="store_true", help="Include done items")
     p_list.add_argument("--priority", type=int, choices=(1, 2, 3))
     p_list.add_argument("--json", action="store_true", dest="as_json")
+    p_list.add_argument(
+        "--no-id",
+        action="store_true",
+        help="Compact output without id column",
+    )
 
     p_done = sub.add_parser("done", help="Mark todo as DONE in source (keeps priority)")
-    p_done.add_argument("ref", help="Item id or file:line")
+    p_done.add_argument("ref", help="Item id, id prefix, or file:line")
     p_done.add_argument("--dry-run", action="store_true")
 
     p_reopen = sub.add_parser("reopen", help="Mark done item as TODO in source")
-    p_reopen.add_argument("ref", help="Item id or file:line")
+    p_reopen.add_argument("ref", help="Item id, id prefix, or file:line")
 
     p_show = sub.add_parser("show", help="Show one item")
     p_show.add_argument("ref")
@@ -150,7 +161,7 @@ def main(argv: list[str] | None = None) -> None:
                 svc.sync()
             status = None if args.all else Status.OPEN
             items = svc.list_items(status=status, priority=args.priority)
-            _print_items(items, as_json=args.as_json)
+            _print_items(items, as_json=args.as_json, show_id=not args.no_id)
             return
 
         if args.command == "done":
