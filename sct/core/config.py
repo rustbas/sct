@@ -54,6 +54,8 @@ DEFAULT_EXCLUDE_DIRS = (
     "dist",
     "build",
     ".sct",
+    "tests",
+    "test",
 )
 
 
@@ -95,7 +97,11 @@ class Config:
         if "include_suffixes" in data:
             self.include_suffixes = tuple(data["include_suffixes"])
         if "exclude_dirs" in data:
-            self.exclude_dirs = tuple(data["exclude_dirs"])
+            merged = list(DEFAULT_EXCLUDE_DIRS)
+            for name in data["exclude_dirs"]:
+                if name not in merged:
+                    merged.append(name)
+            self.exclude_dirs = tuple(merged)
         if "cache_path" in data:
             p = Path(data["cache_path"])
             self.cache_path = p if p.is_absolute() else self.root / p

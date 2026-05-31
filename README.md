@@ -104,6 +104,7 @@ pipx install .
 
 - Кэш: `.sct/cache.json` (в `.gitignore`)
 - Конфиг: `.sct/config.json` — создайте через `sct init` или скопируйте `.sct/config.json.example`
+- По умолчанию не сканируются каталоги `tests/`, `test/`, `.venv`, `node_modules` и др. (см. `sct/core/config.py`)
 
 ## JSON для скриптов
 

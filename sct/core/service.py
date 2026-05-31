@@ -38,7 +38,7 @@ class TodoService:
             shutil.copy(example, target)
         else:
             target.write_text(
-                '{\n  "exclude_dirs": [".git", "__pycache__", ".venv", "node_modules"]\n}\n',
+                '{\n  "exclude_dirs": [".git", "__pycache__", ".venv", "node_modules", "tests"]\n}\n',
                 encoding="utf-8",
             )
         return target
