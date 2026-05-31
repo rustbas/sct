@@ -21,27 +21,26 @@
 
 ## Установка
 
-Зависимости перечислены в `requirements.txt` (предпочтительный способ установки):
+### PyPI (рекомендуется)
+
+Пакет на PyPI называется **`sctodo`**, CLI-команда — **`sct`**:
+
+```bash
+pip install sctodo
+# или изолированно в ~/.local/bin:
+pipx install sctodo
+```
+
+### Из исходников (разработка)
 
 ```bash
 cd /path/to/sct
 python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
+.venv/bin/pip install -r requirements-dev.txt
 .venv/bin/pip install -e .
 ```
 
-Метаданные пакета и console-script `sct` — в `pyproject.toml` (`pip install -e .` после requirements).
-
-### Установка через pipx (пока не настроено)
-
-Пакет уже совместим с установкой в `~/.local/bin`: в `pyproject.toml` объявлен entry point `sct = sct.cli:main`. Когда будете готовы, из корня репозитория должно быть достаточно:
-
-```bash
-pipx install .
-# или, после публикации на PyPI: pipx install sct
-```
-
-Сейчас в README рекомендуется **venv + requirements.txt**; отдельного релиза на PyPI нет.
+Метаданные пакета и console-script `sct` — в `pyproject.toml`.
 
 ## Использование
 
@@ -157,7 +156,6 @@ pipx install .
 
 - Плагин или рецепты для **Neovim** (обёртка над `sct list --json`, переход к `file:line`)
 - Создание **GitHub Issues** из задачи (заготовка в `sct/core/github.py`, пока не реализовано)
-- Публикация на PyPI и документированная установка через **pipx**
 
 ## История версий
 
