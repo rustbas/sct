@@ -1,2 +1,9 @@
 /test/
-__pycache__
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+dist/
+build/
+.sct/cache.json
+*.sct.tmp
