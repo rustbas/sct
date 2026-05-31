@@ -1,13 +1,12 @@
 ---
-name: CI
+name: Publish
 
 on:
-  workflow_dispatch:
   push:
-  pull_request:
+    tags: ["v*"]
 
 jobs:
-  test:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,17 +17,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Build and verify
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements-dev.txt
-          pip install -e .
-
-      - name: Run tests
-        run: python -m unittest discover -s tests -v
-
-      - name: Verify package builds
-        run: |
           pip install build twine
           python -m build
           twine check dist/*
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
