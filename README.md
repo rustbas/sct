@@ -2,8 +2,8 @@
 
 Утилита для учёта задач прямо в исходниках: ищет метки `TODO` / `DONE` в коде, кэширует состояние в JSON и даёт CLI и TUI для просмотра и закрытия задач.
 
-> [!WARNING] 
-> **Примечание:** проект **завайбкожен** — большая часть кода и документации собрана с помощью ИИ (Cursor) в режиме «сделай рабочий прототип», без претензии на идеальную архитектуру. Используйте на свой страх и риск, проверяйте diff перед коммитом.
+> [!WARNING]
+> **Примечание:** проект **завайбкожен** — большая часть кода и документации собрана с помощью ИИ (Cursor). С версии 0.2.0 добавлены тесты, CI и проверки перед правкой файлов; всё равно смотрите diff перед коммитом.
 
 ## Идея
 
@@ -19,42 +19,73 @@
 
 Для закрытых задач — то же с `DONE` / `DONEE` / `DONEEE` (столько же букв `E`, сколько было `O`).
 
-## Установка (только внутри проекта)
+## Установка
 
-Ничего в систему не ставится — только локальное виртуальное окружение:
+Зависимости перечислены в `requirements.txt` (предпочтительный способ установки):
 
 ```bash
 cd /path/to/sct
 python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
 .venv/bin/pip install -e .
 ```
+
+Метаданные пакета и console-script `sct` — в `pyproject.toml` (`pip install -e .` после requirements).
+
+### Установка через pipx (пока не настроено)
+
+Пакет уже совместим с установкой в `~/.local/bin`: в `pyproject.toml` объявлен entry point `sct = sct.cli:main`. Когда будете готовы, из корня репозитория должно быть достаточно:
+
+```bash
+pipx install .
+# или, после публикации на PyPI: pipx install sct
+```
+
+Сейчас в README рекомендуется **venv + requirements.txt**; отдельного релиза на PyPI нет.
 
 ## Использование
 
 ```bash
-# TUI по умолчанию
+# TUI (нужен интерактивный терминал)
 .venv/bin/sct
 
-# Обновить кэш из исходников
+# Первичная настройка каталога .sct/
+.venv/bin/sct init
+
+# Синхронизация (по умолчанию инкрементальная)
 .venv/bin/sct sync
+.venv/bin/sct sync --full -v
+
+# Проверка кэша и исходников
+.venv/bin/sct doctor
+.venv/bin/sct doctor --compare
 
 # Список открытых задач
 .venv/bin/sct list
-
-# Все задачи + JSON (для скриптов / Neovim)
+.venv/bin/sct list --priority 2
 .venv/bin/sct list --all --json
 
-# Закрыть задачу в файле (TODOO → DONEE)
+# Закрыть / открыть (проверяет, что строка не менялась с последнего sync)
 .venv/bin/sct done <id>
-.venv/bin/sct done main.py:26
-.venv/bin/sct done --dry-run main.py:26
-
-# Снова открыть
+.venv/bin/sct done path/to/file.py:12
+.venv/bin/sct done --dry-run <id>
 .venv/bin/sct reopen <id>
 
-# Альтернативный запуск
-.venv/bin/python -m sct
+.venv/bin/sct --version
+.venv/bin/python -m sct sync
 ```
+
+Корень проекта ищется вверх по каталогам (наличие `.sct/cache.json` или `.sct/config.json`), либо задайте `--root`.
+
+## Коды выхода
+
+| Код | Значение |
+|-----|----------|
+| 0   | Успех |
+| 1   | Не найдено |
+| 2   | Устаревший кэш / строка изменилась (`doctor`, `done`) |
+| 3   | Ошибка ввода-вывода |
+| 4   | Неверное использование (например, TUI без TTY) |
 
 ## Метки в коде
 
@@ -71,26 +102,53 @@ python3 -m venv .venv
 
 ## Кэш и конфиг
 
-- Кэш: `.sct/cache.json` (по умолчанию в `.gitignore`)
-- Опционально: `.sct/config.json` — см. `.sct/config.json.example` (суффиксы файлов, исключаемые каталоги)
+- Кэш: `.sct/cache.json` (в `.gitignore`)
+- Конфиг: `.sct/config.json` — создайте через `sct init` или скопируйте `.sct/config.json.example`
+
+## JSON для скриптов
+
+```bash
+.venv/bin/sct list --json
+```
+
+```json
+{
+  "version": "0.2.0",
+  "items": [ { "id": "…", "file": "…", "line": 1, … } ]
+}
+```
+
+Удобно вызывать из Neovim через `jobstart` / `system` без отдельного плагина.
 
 ## Клавиши TUI
 
-| Клавиша | Действие              |
-|---------|------------------------|
-| `r`     | Синхронизация          |
-| `d`     | Закрыть (с подтверждением) |
-| `o`     | Открыть снова          |
-| `a`     | Все / только открытые  |
-| `/`     | Фильтр                 |
-| `q`     | Выход                  |
+| Клавиша | Действие |
+|---------|----------|
+| `r` | Синхронизация |
+| `d` | Закрыть (с подтверждением) |
+| `o` | Открыть снова |
+| `a` | Все / только открытые |
+| `/` | Фильтр |
+| `q` | Выход |
+
+При устаревшем кэше при старте показывается предупреждение.
 
 ## Тесты
 
 ```bash
-.venv/bin/python -m unittest discover -s tests
+.venv/bin/pip install -r requirements-dev.txt
+.venv/bin/pip install -e .
+.venv/bin/python -m unittest discover -s tests -v
 ```
+
+В CI то же самое (см. `.github/workflows/ci.yml`).
 
 ## Планы
 
-- Создание issue на GitHub из задачи (заготовка в `sct/core/github.py`)
+- Плагин или рецепты для **Neovim** (обёртка над `sct list --json`, переход к `file:line`)
+- Создание **GitHub Issues** из задачи (заготовка в `sct/core/github.py`, пока не реализовано)
+- Публикация на PyPI и документированная установка через **pipx**
+
+## История версий
+
+См. [CHANGELOG.md](CHANGELOG.md).
