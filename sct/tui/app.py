@@ -98,7 +98,7 @@ class SctApp(App):
         Binding("G", "move_bottom", "Bottom", show=False),
         Binding("ctrl+d", "page_down", "PgDown", show=False),
         Binding("ctrl+u", "page_up", "PgUp", show=False),
-        # actions (lf-style single letters)
+        # single-letter actions
         Binding("q", "quit", "Quit", show=False),
         Binding("r", "refresh", "Sync", show=False),
         Binding("d", "done", "Done", show=False),
