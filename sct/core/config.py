@@ -38,6 +38,7 @@ DEFAULT_INCLUDE_SUFFIXES = (
     ".html",
     ".css",
     ".scss",
+    ".tf",
 )
 
 DEFAULT_EXCLUDE_DIRS = (
